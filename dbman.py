@@ -5,7 +5,7 @@ import sqlite3
 class DBMan:
 #Crawler 테이블 최초 작성
 
-	def __init__(self, dbname = "PATH/TO/DATABASE/kic.dbkhu.db"):
+	def __init__(self, dbname = "PATH/TO/DATABASE/khu.db"):
 		self.dbname = dbname
 		self.conn = sqlite3.connect(dbname, check_same_thread = False)
 
