@@ -57,6 +57,9 @@ def get_notices(soup):
             title = subsoup.find('div', {'class':'tit'})
             title = title.find('p', {'class':'txt06'}).get_text().strip()
 
+        #The special characters '<' and '>' causes Telegram to think the characters in between those two special characters are some unknown kind of HTML tag while parsing the title in HTML mode.
+        title = title.translate({ord(c): '"' for c in "<>"})
+
         issuer = row.find('td', {'class':'col03'}).get_text().strip()
         date = row.find('td', {'class':'col04'}).get_text().strip()
 
@@ -202,8 +205,11 @@ for category in [general, undergraduate, scholarships, credex, events]:
                     try:
                         bot.delete_message(chat_id = channel, message_id = message_id)
                     except:
-                        bot.edit_message_text(text = '#obsolete\n오래된 공지입니다.\n다시 보려면 학교 누리집을 방문해주십시오.' , chat_id = channel, message_id = message_id)
-                    db.del_notice(notice_category, stuff)
+                        try:
+                            bot.edit_message_text(text = '#obsolete\n오래된 공지입니다.\n다시 보려면 학교 누리집을 방문해주십시오.' , chat_id = channel, message_id = message_id)
+                            db.del_notice(notice_category, stuff)
+                        except:
+                            pass
 
         new_pinned.clear()
         check_pinned.clear()
@@ -238,9 +244,12 @@ for category in [general, undergraduate, scholarships, credex, events]:
                     try:
                         bot.delete_message(chat_id = channel, message_id = message_id)
                     except:
-                        bot.edit_message_text(text = '#obsolete\n오래된 공지입니다.\n다시 보려면 학교 누리집을 방문해주십시오.' , chat_id = channel, message_id = message_id)
-                    db.del_notice(notice_category, stuff)
-
+                        try:
+                            bot.edit_message_text(text = '#obsolete\n오래된 공지입니다.\n다시 보려면 학교 누리집을 방문해주십시오.' , chat_id = channel, message_id = message_id)
+                            db.del_notice(notice_category, stuff)
+                        except:
+                            pass
+                            
         new_normal.clear()
         check_normal.clear()
 
